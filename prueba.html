@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario Centrado</title>
+    <style>
+      /* Estilos globales */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #F6F9FE;
+      }
+
+      .form-container {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+      }
+
+      .form-container h2 {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+
+      .form-group button {
+        width: 100%;
+        padding: 10px;
+        background-color: #0043a9;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .form-group button:hover {
+        background-color: #003380;
+      }
+
+      @media (min-width: 768px) {
+        /* Para pantallas más grandes, el formulario está centrado con un ancho limitado */
+
+        .form-container {
+          width: 400px;
+        }
+        .cabeza{
+            display: none;
+        }
+      }
+
+      @media (max-width: 600px) {
+        /* Para pantallas más grandes, el formulario está centrado con un ancho limitado */
+
+        body {
+          align-items: start;
+        }
+       
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <div style="height: 50px; width: 100%; background: #2d3f63" class="cabeza"></div>
+      <div
+        class="imagenlogo"
+        style="
+          width: 100%;
+          text-align: center;
+          background: white;
+          height: 50px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        "
+      >
+        <h4>Ingreso a Banca Virtual</h4>
+      </div>
+      <div style="padding: 20px">
+        <div class="centrars">
+          <div class="titulo"><h4>Solicita tu crédito</h4></div>
+
+          <div class="formcontainer" style="margin-top: 20px;">
+            <!-- Formularios -->
+            <div class="forms" style="border-radius: 10px">
+              <div id="form1" class="form-content">
+                <form id="segura">
+                  <p>
+                    Seleccione el monto de su crédito que usted desea solicitar,
+                    100% digital
+                  </p>
+
+                  <div style="width: 100%; text-align: center">
+                    <div
+                      style="
+                        width: 100%;
+                        text-align: center;
+                        color: #0043a9;
+                        font-weight: bold;
+                        margin-bottom: 20px;
+                        margin-top: 20px;
+                      "
+                    >
+                      Selecciona el monto de tu crédito:
+                    </div>
+                    <div
+                      class="slider-container"
+                      style="position: relative; width: 100%"
+                    >
+                      <div
+                        class="slider-value"
+                        id="sliderValue"
+                        style="
+                          color: #0043a9;
+                          font-size: 18px;
+                          margin-bottom: 10px;
+                        "
+                      >
+                        $10,000 USD
+                      </div>
+                      <input
+                        type="range"
+                        min="13000000"
+                        max="80000000"
+                        value="25000000"
+                        class="slider"
+                        id="priceSlider"
+                        style="width: 100%"
+                      />
+                    </div>
+                  </div>
+
+                  <style>
+                    .slider {
+                      -webkit-appearance: none;
+                      appearance: none;
+                      width: 100%;
+                      height: 10px;
+                      background: #e0e0e0;
+                      border-radius: 5px;
+                      outline: none;
+                      opacity: 0.8;
+                      transition: opacity 0.2s;
+                    }
+
+                    .slider:hover {
+                      opacity: 1;
+                    }
+
+                    /* Estilos para la bolita del slider */
+                    .slider::-webkit-slider-thumb {
+                      -webkit-appearance: none;
+                      appearance: none;
+                      width: 24px;
+                      height: 24px;
+                      border-radius: 50%;
+                      background: #0043a9;
+                      cursor: pointer;
+                      box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+                      transition: background 0.2s ease-in-out;
+                    }
+
+                    .slider::-webkit-slider-thumb:hover {
+                      background: #003380;
+                    }
+
+                    .slider::-moz-range-thumb {
+                      width: 24px;
+                      height: 24px;
+                      border-radius: 50%;
+                      background: #0043a9;
+                      cursor: pointer;
+                      box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+                      transition: background 0.2s ease-in-out;
+                    }
+
+                    .slider::-moz-range-thumb:hover {
+                      background: #003380;
+                    }
+
+                    /* Para que se vea bien en dispositivos móviles */
+                    .slider-container {
+                      padding: 10px;
+                    }
+                  </style>
+
+                  <script>
+                    const slider = document.getElementById("priceSlider");
+                    const sliderValue = document.getElementById("sliderValue");
+
+                    function formatNumber(num) {
+                      if (num < 10000) {
+                        return num;
+                      }
+                      return num
+                        .toString()
+                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    slider.addEventListener("input", function () {
+                      sliderValue.textContent = `$${formatNumber(
+                        slider.value
+                      )} COP`;
+                    });
+
+                    // Formatear el valor inicial del slider
+                    sliderValue.textContent = `$${formatNumber(
+                      slider.value
+                    )} COP`;
+                  </script>
+
+                  <div style="width: 100%; text-align: center">
+                    <button
+                      style="
+                        padding: 10px;
+                        background: #0043a9;
+                        border-radius: 20px;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 15px;
+                        margin-top: 30px;
+                        width: 250px !important;
+                        display: inline-block; /* Cambia el display a inline-block */
+                        text-align: center; /* Alinea el texto al centro */
+                        text-decoration: none; /* Elimina el subrayado */
+                      "
+                    >
+                      Solicitar crédito
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

